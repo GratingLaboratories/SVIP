@@ -2,10 +2,13 @@ import pygame
 from pygame.locals import *
 
 from scene import Scene
-from scenes import Prompt, Success
+from scenes import Prompt, Offset
 from screen import boundary
 from render import render
 from .text import text
+
+
+"""感觉这个模块没啥用处，已被跳过"""
 
 
 class Wpl(Scene):
@@ -16,18 +19,18 @@ class Wpl(Scene):
 
     def draw(self):
         font = pygame.font.Font(self.fontname, 48)
-        self.surface.fill((255, 255, 255))
-        render(font, text['wpl0'], color=(0, 0, 0), surface=self.surface, topleft=(0, 0))
-        render(font, text['wpl9'], color=(0, 0, 0), surface=self.surface, bottomleft=(0, 1080))
-        for x in boundary(self.screen.ppl, self.surface.get_width()):
+        self.surface.fill((0, 0, 255))
+        render(font, text['wpl0'], surface=self.surface, topleft=(0, 0))
+        render(font, text['wpl9'], surface=self.surface, bottomleft=(0, 1080))
+        for x in boundary(self.screen.ppl, 1120, 800):
             for i in range(self.screen.wpl):
-                pygame.draw.line(self.surface, (0, 0, 0), (int(x + i), 100), (int(x + i), 980))
+                pygame.draw.line(self.surface, (255, 255, 255), (int(x + i), 100), (int(x + i), 980))
 
     def esc(self, _):
         self.next_scene = Prompt(self.surface, self.fontname, self)
 
     def space(self, _):
-        self.next_scene = Success(self.surface, self.fontname)
+        self.next_scene = Offset(self.surface, self.fontname, self, self.screen)
 
     def left(self, _):
         if self.screen.wpl > 1:

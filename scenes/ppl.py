@@ -12,7 +12,7 @@ class Ppl(Scene):
     def __init__(self, surface, fontname, parent=None, screen=None):
         super(Ppl, self).__init__(surface, fontname, parent)
         self.screen = screen
-        self.screen.ppl = 10.
+        self.screen.ppl = 13.6
         self.step = 0.1
 
     def draw(self):
