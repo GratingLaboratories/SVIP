@@ -2,14 +2,14 @@ import numpy as np
 import cv2
 
 
-def onMouse(event, x, y, flag, param):
-    if isinstance(param, tracker) == False:
+def on_mouse(event, x, y, _, param):
+    if not isinstance(param, Tracker):
         return
     if event == cv2.EVENT_LBUTTONDOWN:
-        param.changePos(x / 2, y / 2)
+        param.change_pos(x / 2, y / 2)
 
 
-class eye():
+class Eye:
     def __init__(self, width, x=0, y=0):
         self.x = x
         self.y = y
@@ -23,10 +23,9 @@ class Region:
         self.end = []
 
 
-class tracker():
+class Tracker:
     def __init__(self, bact, max_x, max_y):
         self.bact = bact
-        self.isinited = True
         self.outofFocus = False
         self.isLost = True
         self.xrange = [0, 0]
@@ -39,22 +38,22 @@ class tracker():
         self.isgreat = True
         self.eye_cascade = cv2.CascadeClassifier('../resources/haarcascade_eye.xml')
         self.retry = 0
+        self.dynamic = False
 
-    def changePos(self, x, y):
+    def change_pos(self, x, y):
         self.bact.x = x
         self.bact.y = y
         self.bact.prev = (x, y)
         self.isLost = False
         self.outofFocus = False
         self.ischangeing = True
-        self.setRange()
+        self.set_range()
         self.ischangeing = False
         self.dynamic = True
 
     def update(self, frame):
-        if self.isinited == False or self.isLost == True or self.ischangeing == True:
+        if self.isLost or self.ischangeing:
             return 0
-
 
         if self.dynamic:
             x, y = self.bact.x, self.bact.y
@@ -62,14 +61,14 @@ class tracker():
             self.bact.x += self.bact.x - self.bact.prev[0]
             self.bact.y += self.bact.y - self.bact.prev[1]
             self.bact.prev = (x, y)
-        self.setRange()
+        self.set_range()
 
         ylow = self.yrange[0]
         yhigh = self.yrange[1]
         xlow = self.xrange[0]
         xhigh = self.xrange[1]
 
-        region = frame[ylow : yhigh, xlow: xhigh]
+        region = frame[ylow: yhigh, xlow: xhigh]
 
         region = np.array(region, dtype='uint8')
         # cv2.imshow('small', region)
@@ -87,7 +86,7 @@ class tracker():
         else:
             if self.retry > 5:
                 region = np.ones(region.shape) * 255 - region
-                res = np.where(region >= region.max() - 3)
+                res = np.where(region >= region.max() - 3)  # TODO
                 resy = res[0]
                 resx = res[1]
                 posx = resx.mean()
@@ -97,7 +96,7 @@ class tracker():
             else:
                 self.retry += 1
             self.dynamic = False
-            # self.setRange()
+            # self.set_range()
         # res = np.where(region >= region.max() - 3)
         # resy = res[0]
         # resx = res[1]
@@ -106,7 +105,7 @@ class tracker():
         # self.isLost = False
         return self.bact.x, self.bact.y
 
-    def setRange(self):
+    def set_range(self):
         x = int(self.bact.x)
         y = int(self.bact.y)
 
@@ -134,18 +133,18 @@ class tracker():
             self.isLost = True
             return
 
-if __name__ == '__main__':
+
+def main():
     font = cv2.FONT_HERSHEY_SIMPLEX
     cap = cv2.VideoCapture(0)
     ret, frame = cap.read()
     y, x, channel = np.shape(frame)
-    track = tracker(eye(30), x , y)
+    track = Tracker(Eye(30), x, y)
     cv2.namedWindow('test')
     cv2.namedWindow('small')
-    cv2.setMouseCallback('test', onMouse, track)
-    contrast = 0
+    cv2.setMouseCallback('test', on_mouse, track)
 
-    while(1):
+    while True:
         ret, frame = cap.read()
         if frame is None:
             break
@@ -160,11 +159,14 @@ if __name__ == '__main__':
             cv2.rectangle(frame, (track.xrange[0], track.yrange[0]), (track.xrange[1], track.yrange[1]), (255, 0, 0), 3)
 
         cv2.putText(frame, "x=%.2f, y=%.2f" % (track.bact.x, track.bact.y), (10, 50), font, 0.5,
-                        (255, 255, 255), 1, cv2.LINE_AA)
-        frame = cv2.resize(frame, None, fx=2, fy=2, interpolation = cv2.INTER_CUBIC)
+                    (255, 255, 255), 1, cv2.LINE_AA)
+        frame = cv2.resize(frame, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
         cv2.imshow('test', frame)
         if cv2.waitKey(30) & 0xFF == 27:
             break
 
     cv2.destroyAllWindows()
     cap.release()
+
+if __name__ == '__main__':
+    main()

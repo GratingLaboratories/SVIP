@@ -7,13 +7,12 @@ from colorama import *
 from functools import wraps
 
 
-class Retry_Error(Exception):
+class RetryError(Exception):
     pass
 
 
-def ignore(level=logging.INFO, message=None):
+def ignore(level=logging.INFO, msg=''):
     def decorate(func):
-        msg = message if message else ''
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
@@ -26,9 +25,8 @@ def ignore(level=logging.INFO, message=None):
     return decorate
 
 
-def retry(retry_time=3, level=logging.INFO, message=None):
+def retry(retry_time=3, level=logging.INFO, msg=''):
     def decorate(func):
-        msg = message if message else ''
         @wraps(func)
         def wrapper(*args, **kwargs):
             d_time = 1
@@ -37,10 +35,10 @@ def retry(retry_time=3, level=logging.INFO, message=None):
             feedback_index = kwargs.get('feedback_index', None)
             while True:
                 if d_time > retry_time:
-                    if feedback_queue != None:
-                        feedback_queue.put(Retry_Error)
-                    if feedback_index != None and feedback_pool != None:
-                        feedback_pool[feedback_index] = Retry_Error
+                    if feedback_queue:
+                        feedback_queue.put(RetryError)
+                    if feedback_index and feedback_pool:
+                        feedback_pool[feedback_index] = RetryError
                     break
                 try:
                     func(*args, **kwargs)
@@ -57,19 +55,19 @@ def init_all(level=logging.INFO):
     if not os.path.exists('log'):
         os.mkdir('log')
 
-    rootLogger = logging.getLogger()
-    rootLogger.setLevel(level)
+    root_logger = logging.getLogger()
+    root_logger.setLevel(level)
 
-    logFormatter = logging.Formatter("%(asctime)s [%(levelname)s] %(threadName)s: %(message)s")
-    fileHandler = logging.FileHandler(os.path.join('log', str(datetime.datetime.now()).replace(':', '_') + '.log'))
-    fileHandler.setFormatter(logFormatter)
-    consoleHandler = logging.StreamHandler(stream=sys.stdout)
-    consoleHandler.setFormatter(Log_Formatter())
-    rootLogger.addHandler(consoleHandler)
-    rootLogger.addHandler(fileHandler)
+    log_formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(threadName)s: %(message)s")
+    file_handler = logging.FileHandler(os.path.join('log', str(datetime.datetime.now()).replace(':', '_') + '.log'))
+    file_handler.setFormatter(log_formatter)
+    console_handler = logging.StreamHandler(stream=sys.stdout)
+    console_handler.setFormatter(LogFormatter())
+    root_logger.addHandler(console_handler)
+    root_logger.addHandler(file_handler)
 
 
-class Log_Formatter(logging.Formatter):
+class LogFormatter(logging.Formatter):
     def __init__(self, style='{'):
         logging.Formatter.__init__(self, style=style)
 
@@ -77,7 +75,7 @@ class Log_Formatter(logging.Formatter):
         stdout_template = '{levelname}' + Fore.RESET + '] {threadName}: ' + '{message}'
         stdout_head = '[%s'
 
-        allFormats = {
+        all_formats = {
             logging.DEBUG: logging.StrFormatStyle(stdout_head % Fore.LIGHTBLUE_EX + stdout_template),
             logging.INFO: logging.StrFormatStyle(stdout_head % Fore.GREEN + stdout_template),
             logging.WARNING: logging.StrFormatStyle(stdout_head % Fore.LIGHTYELLOW_EX + stdout_template),
@@ -85,12 +83,11 @@ class Log_Formatter(logging.Formatter):
             logging.CRITICAL: logging.StrFormatStyle(stdout_head % Fore.RED + stdout_template)
         }
 
-        self._style = allFormats.get(record.levelno, logging.StrFormatStyle(logging._STYLES['{'][1]))
+        self._style = all_formats.get(record.levelno, logging.StrFormatStyle(logging._STYLES['{'][1]))  # TODO
         self._fmt = self._style._fmt
         result = logging.Formatter.format(self, record)
 
         return result
-
 
 
 def reporthook(blocknum, blocksize, totalsize):
@@ -102,5 +99,3 @@ def reporthook(blocknum, blocksize, totalsize):
         print(s, end='')
     else:  # total size is unknown
         print("read %d\n" % (readsofar,), end='')
-
-

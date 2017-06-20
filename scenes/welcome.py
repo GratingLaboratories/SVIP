@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 
 from scene import Scene
-from scenes import Ppl
+from scenes import Ppl, EyesCalibration
 from render import render
 from screen import Screen
 from .text import text
@@ -17,10 +17,11 @@ class Welcome(Scene):
         render(font, text['welcome2'], surface=self.surface, topleft=(0, 256))
         render(font, text['welcome9'], surface=self.surface, bottomleft=(0, 1080))
 
-    def esc(self, _):
+    @staticmethod
+    def esc(_):
         exit()
 
     def space(self, _):
-        self.next_scene = Ppl(self.surface, self.fontname, self, Screen())
+        self.next_scene = EyesCalibration(self.surface, self.fontname, self, Screen(), (0, 0))
 
     keys = {K_ESCAPE: esc, K_SPACE: space}
