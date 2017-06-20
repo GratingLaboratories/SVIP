@@ -1,2 +1,21 @@
-*.pyc
+# Media file
+*.avi
+*.jpg
+*.png
+*.mp4
+
+# IDE
+.vscode/
 .idea/
+
+# Binary file
+*.pyc
+*.exe
+*.dll
+*.lib
+
+# Log and data
+*.log
+*.dat
+Log/
+log/
