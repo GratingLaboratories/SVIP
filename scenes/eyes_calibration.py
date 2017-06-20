@@ -5,10 +5,12 @@ from pygame.locals import *
 from pygame import surfarray
 from universal import *
 from scene import Scene
-from cv.tracker import tracker, eye
+from cv.tracker import Tracker, Eye
+
 
 class CameraError(Exception):
     pass
+
 
 class EyesCalibration(Scene):
     def __init__(self, surface, fontname, parent, screen, offset):
@@ -42,7 +44,7 @@ class EyesCalibration(Scene):
         width_ratio = surf_width / width
         height_ratio = surf_height / height
         self.ratio = min(width_ratio, height_ratio)
-        self.tracker = tracker(eye(20), width, height)
+        self.tracker = Tracker(Eye(20), width, height)
         self.position = (0, 0)
         self.offset = offset
         self.colors = [(0xFF, 0, 0), (0xFF, 0xD7, 0), (0, 0xFF, 0xFF), (0, 0x66, 0x66), (0, 0, 0xFA),
@@ -60,7 +62,7 @@ class EyesCalibration(Scene):
             click = (x - off_x, y - off_y)
             click[0] /= self.ratio
             click[1] /= self.ratio
-            self.tracker.changePos(click[0], click[1])
+            self.tracker.change_pos(click[0], click[1])
 
     def draw(self):
         frame = self.capture()

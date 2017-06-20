@@ -18,7 +18,8 @@ class Prompt(Scene):
     def esc(self, _):
         self.next_scene = self.parent
 
-    def space(self, _):
+    @staticmethod
+    def space(_):
         exit()
 
     keys = {K_ESCAPE: esc, K_SPACE: space}

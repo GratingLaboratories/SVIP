@@ -17,7 +17,8 @@ class Welcome(Scene):
         render(font, text['welcome2'], surface=self.surface, topleft=(0, 256))
         render(font, text['welcome9'], surface=self.surface, bottomleft=(0, 1080))
 
-    def esc(self, _):
+    @staticmethod
+    def esc(_):
         exit()
 
     def space(self, _):
