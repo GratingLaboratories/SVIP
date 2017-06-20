@@ -36,7 +36,7 @@ class Tracker:
         self.contrast_prev = 0
         self.dire_up = False
         self.isgreat = True
-        self.eye_cascade = cv2.CascadeClassifier('../resources/haarcascade_eye.xml')
+        self.eye_cascade = cv2.CascadeClassifier('./resources/haarcascade_eye.xml')
         self.retry = 0
         self.dynamic = False
 
@@ -53,7 +53,7 @@ class Tracker:
 
     def update(self, frame):
         if self.isLost or self.ischangeing:
-            return 0
+            return (0, 0)
 
         if self.dynamic:
             x, y = self.bact.x, self.bact.y
@@ -96,13 +96,7 @@ class Tracker:
             else:
                 self.retry += 1
             self.dynamic = False
-            # self.set_range()
-        # res = np.where(region >= region.max() - 3)
-        # resy = res[0]
-        # resx = res[1]
-        # posx = resx.mean()
-        # posy = resy.mean()
-        # self.isLost = False
+
         return self.bact.x, self.bact.y
 
     def set_range(self):

@@ -1,10 +1,11 @@
 import cv2
 
-face_cascade = cv2.CascadeClassifier(r"resources\haarcascade_frontalface_default.xml")
-eye_cascade = cv2.CascadeClassifier(r"resources\haarcascade_eye.xml")
+face_cascade = cv2.CascadeClassifier("resources/haarcascade_frontalface_default.xml")
+eye_cascade = cv2.CascadeClassifier("resources/haarcascade_eye.xml")
 
 cap = cv2.VideoCapture(0)
 cv2.namedWindow('small')
+
 
 while True:
     ret, img = cap.read()
@@ -19,6 +20,7 @@ while True:
         eyes = eye_cascade.detectMultiScale(roi_gray, 1.1, 4, minSize=(20, 20), maxSize=(50, 50))
         for (ex, ey, ew, eh) in eyes:
             cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
+
     img = cv2.resize(img, None, fx=2, fy=2)
     img = cv2.flip(img, 1)
     cv2.imshow('img', img)

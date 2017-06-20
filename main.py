@@ -24,6 +24,7 @@ from scenes import Welcome
 def main():
     pygame.init()
     pygame.display.set_mode((1920, 1080), FULLSCREEN)
+    # pygame.display.set_mode((1920, 1080))
     surface = pygame.display.get_surface()
     font = 'font/wqy-microhei.ttc'
     fps = 60
