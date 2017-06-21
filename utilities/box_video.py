@@ -52,9 +52,9 @@ def box_moving(time, dims, fps, dense=50, length=80, vel=10, omega=0.01, A=1, fa
             ld = (int(center[0] - length / 2), int(center[1] + length / 2))
             ru = (int(center[0] + length / 2), int(center[1] - length / 2))
             pts = np.array([lu, ld, rd, ru], np.int32)
-            cv2.fillPoly(meshed, np.array([pts], np.int32), (128, 0, 0))
+            cv2.fillPoly(meshed, np.array([pts], np.int32), (171, 171, 175))
             frames.append(meshed)
-        
+
         pos = nextPos
 
         yield frames
