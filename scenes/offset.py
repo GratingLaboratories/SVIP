@@ -41,7 +41,7 @@ class Offset(Scene):
         self.next_scene = Prompt(self.surface, self.fontname, self)
 
     def space(self, _):
-        self.next_scene = Success(self.surface, self.fontname, self)
+        self.next_scene = Success(self.surface, self.fontname, self, self.screen)
 
     def z(self, _):
         self.next_scene = self.parent

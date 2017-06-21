@@ -70,15 +70,16 @@ class EyesCalibration(Scene):
     def draw(self):
         frame = self.capture()
         c_index = 0
-        for pos in self.screen.positions:
-            x, y = pos
-            x = int(x + 0.5)
-            y = int(y + 0.5)
-            start = (x - 3, y - 3)
-            end = (x + 3, y + 3)
-            cv2.rectangle(frame, start, end, self.colors[c_index], 2)
-            c_index += 1
-            c_index %= len(self.colors)
+        for group in self.screen.positions:
+            for pos in self.screen.positions[group]:
+                x, y = pos
+                x = int(x + 0.5)
+                y = int(y + 0.5)
+                start = (x - 3, y - 3)
+                end = (x + 3, y + 3)
+                cv2.rectangle(frame, start, end, self.colors[c_index], 2)
+                c_index += 1
+                c_index %= len(self.colors)
 
         x, y = self.position
         start = (int(x + 0.5) - 10, int(y + 0.5) - 10)

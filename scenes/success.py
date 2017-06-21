@@ -30,10 +30,10 @@ class Success(Scene):
         right = max(poss.keys())
         l_av = sum(map(lambda x: x[0], poss[left])) / len(poss[left])
         r_av = sum(map(lambda x: x[0], poss[right])) / len(poss[right])
-        screen['period'] = (r_av - l_av) / (right - left)
-        screen['offset'] = l_av;
-        with open('screen.conf', 'w') as f:
-            f.write(repr(screen))
+        screen['period'] = (l_av - r_av) / (right - left)
+        screen['offset'] = l_av
+        # with open('screen.conf', 'w') as f:
+        #     f.write(repr(screen))
         self.next_scene = Verify(self.surface, self.fontname, self, screen)
 
     keys = {K_ESCAPE: esc, K_SPACE: space}

@@ -4,13 +4,13 @@ from pygame.locals import *
 from scene import Scene
 from scenes import EyesCalibration
 from screen import boundary, Screen
-from render import render
-from .text import text
 
 
-class Offset(Scene):
+class Verify(Scene):
     def __init__(self, surface, fontname, parent=None, screen=None):
-        super(Offset, self).__init__(surface, fontname, parent)
+        super(Verify, self).__init__(surface, fontname, parent)
+        with open('screen.conf') as f:
+            screen = eval(f.read())
         self.screen = screen
         s = Screen()
         s.ppl = screen['ppl']
