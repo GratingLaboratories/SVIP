@@ -1,4 +1,5 @@
 from .prompt import Prompt
+from .verify import Verify
 from .success import Success
 from .eyes_calibration import EyesCalibration
 from .offset import Offset

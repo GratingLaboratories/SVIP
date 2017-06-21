@@ -2,12 +2,16 @@ import pygame
 from pygame.locals import *
 
 from scene import Scene
-from scenes import Prompt
+from scenes import Prompt, Verify
 from render import render
 from .text import text
 
 
 class Success(Scene):
+    def __init__(self, surface, fontname, parent=None, screen=None):
+        super(Success, self).__init__(surface, fontname, parent)
+        self.screen = screen
+
     def draw(self):
         font = pygame.font.Font(self.fontname, 48)
         self.surface.fill(0)
@@ -19,7 +23,17 @@ class Success(Scene):
         self.next_scene = Prompt(self.surface, self.fontname, self)
 
     def space(self, _):
-        # TODO
-        exit()
+        screen = {'ppl': self.screen.ppl,
+                  'wpl': self.screen.wpl}
+        poss = self.screen.positions
+        left = min(poss.keys())
+        right = max(poss.keys())
+        l_av = sum(map(lambda x: x[0], poss[left])) / len(poss[left])
+        r_av = sum(map(lambda x: x[0], poss[right])) / len(poss[right])
+        screen['period'] = (r_av - l_av) / (right - left)
+        screen['offset'] = l_av;
+        with open('screen.conf', 'w') as f:
+            f.write(repr(screen))
+        self.next_scene = Verify(self.surface, self.fontname, self, screen)
 
     keys = {K_ESCAPE: esc, K_SPACE: space}

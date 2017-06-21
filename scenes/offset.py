@@ -12,7 +12,6 @@ class Offset(Scene):
     def __init__(self, surface, fontname, parent=None, screen=None):
         super(Offset, self).__init__(surface, fontname, parent)
         self.screen = screen
-        self.screen.offset = 0
         self.sub_surf = surface.subsurface(pygame.Rect((480, 540), (960, 540)))
         self.sub_window = EyesCalibration(self.sub_surf, fontname, self, screen, (480, 540))
 
@@ -32,7 +31,7 @@ class Offset(Scene):
         render(font, text['ppl8'], surface=self.surface, bottomleft=(0, 1080-128))
         render(font, text['ppl9'], surface=self.surface, bottomleft=(0, 1080))
         for x in boundary(self.screen.ppl, 1120, 800):
-            for i in range(self.screen.offset, self.screen.offset + self.screen.wpl):
+            for i in range(self.screen.wpl):
                 pygame.draw.line(self.surface, (0, 255, 0), (x + i, 100), (x + i, 980))
             # for i in range(self.screen.offset + self.screen.wpl, self.screen.offset + self.screen.wpl * 2):
             #     pygame.draw.line(self.surface, (0, 0, 255), (x + i, 100), (x + i, 980))
@@ -44,15 +43,7 @@ class Offset(Scene):
     def space(self, _):
         self.next_scene = Success(self.surface, self.fontname, self)
 
-    def left(self, _):
-        self.screen.offset -= 1
-        self.screen.offset %= int(self.screen.ppl)
-
-    def right(self, _):
-        self.screen.offset += 1
-        self.screen.offset %= int(self.screen.ppl)
-
     def z(self, _):
         self.next_scene = self.parent
 
-    keys = {K_ESCAPE: esc, K_SPACE: space, K_LEFT: left, K_RIGHT: right, K_z: z}
+    keys = {K_ESCAPE: esc, K_SPACE: space, K_z: z}

@@ -24,7 +24,7 @@ class EyesCalibration(Scene):
         """
         Scene.__init__(self, surface, fontname, parent)
         self.screen = screen
-        self.screen.positions = []
+        self.screen.positions = {}
         self.cap = cv2.VideoCapture(0)
         ret, frame = self.cap.read()
         try:
@@ -56,7 +56,7 @@ class EyesCalibration(Scene):
         if event.type == KEYUP:
             func = EyesCalibration.keys.get(event.key, None)
             if func:
-                func(self)
+                func(self, event)
 
         if pygame.mouse.get_pressed()[0]:
             x, y = pygame.mouse.get_pos()
@@ -112,10 +112,16 @@ class EyesCalibration(Scene):
         self.next_scene = self
         return next_scene
 
-    def add_new_pos(self):
-        self.screen.positions.append(self.position)
+    def add_new_pos(self, event):
+        self.screen.positions.setdefault(event.key, [])
+        self.screen.positions[event.key].append(self.position)
 
-    def delete_pos(self):
-        self.screen.positions.pop(-1)
-
-    keys = {K_INSERT: add_new_pos, K_DELETE: delete_pos}
+    keys = {K_1: add_new_pos,
+            K_2: add_new_pos,
+            K_3: add_new_pos,
+            K_4: add_new_pos,
+            K_5: add_new_pos,
+            K_6: add_new_pos,
+            K_7: add_new_pos,
+            K_8: add_new_pos,
+            K_9: add_new_pos}
