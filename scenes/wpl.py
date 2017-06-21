@@ -8,9 +8,6 @@ from render import render
 from .text import text
 
 
-"""感觉这个模块没啥用处，已被跳过"""
-
-
 class Wpl(Scene):
     def __init__(self, surface, fontname, parent=None, screen=None):
         super(Wpl, self).__init__(surface, fontname, parent)

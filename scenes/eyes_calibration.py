@@ -65,7 +65,7 @@ class EyesCalibration(Scene):
             click[0] /= self.ratio
             click[1] /= self.ratio
             # print(click)
-            self.tracker.change_pos( self.dims[0] - click[0], click[1])
+            self.tracker.change_pos(self.dims[0] - click[0], click[1])
 
     def draw(self):
         frame = self.capture()
@@ -118,7 +118,4 @@ class EyesCalibration(Scene):
     def delete_pos(self):
         self.screen.positions.pop(-1)
 
-    def esc(self):
-        exit()
-
-    keys = {K_SPACE: add_new_pos, K_DELETE: delete_pos, K_ESCAPE: esc}
+    keys = {K_INSERT: add_new_pos, K_DELETE: delete_pos}
