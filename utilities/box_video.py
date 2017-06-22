@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-def box_moving(time, dims, fps, dense=50, length=80, vel=10, omega=0.01, A=1, far=6, eye_d=0.5):
+def box_moving(time, dims, fps, dense=50, length=80, vel=10, omega=0.005, A=2, far=8, eye_d=40):
     width, height = dims
     blank_img = np.zeros((height, width, 3), np.uint8)
 
@@ -11,7 +11,7 @@ def box_moving(time, dims, fps, dense=50, length=80, vel=10, omega=0.01, A=1, fa
         cv2.line(blank_img, (int(i), 0), (int(i), height), (115, 85, 47), 2)
 
     for i in list(np.linspace(0, height, dense)):
-        cv2.line(blank_img, (0, int(i)), (height, int(i)), (115, 85, 47), 2)
+        cv2.line(blank_img, (0, int(i)), (width, int(i)), (115, 85, 47), 2)
     
     def projection():
         distance = far + nextPos[2]
@@ -40,7 +40,7 @@ def box_moving(time, dims, fps, dense=50, length=80, vel=10, omega=0.01, A=1, fa
             nextPos[1] = length - nextPos[1]
             velocity[1] = -velocity[1]
 
-        nextPos[2] = A * np.sin(2 * np.pi * omega * i) + 1
+        nextPos[2] = A * np.sin(2 * np.pi * omega * i) + 2
         delta = projection()
 
         pos_lr = [[nextPos[0] - delta, nextPos[1]], [nextPos[0] + delta, nextPos[1]]]

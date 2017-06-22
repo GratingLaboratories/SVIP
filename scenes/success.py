@@ -32,8 +32,8 @@ class Success(Scene):
         r_av = sum(map(lambda x: x[0], poss[right])) / len(poss[right])
         screen['period'] = (l_av - r_av) / (right - left)
         screen['offset'] = l_av
-        # with open('screen.conf', 'w') as f:
-        #     f.write(repr(screen))
+        with open('screen.conf', 'w') as f:
+            f.write(repr(screen))
         self.next_scene = Verify(self.surface, self.fontname, self, screen)
 
     keys = {K_ESCAPE: esc, K_SPACE: space}

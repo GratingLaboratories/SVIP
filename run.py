@@ -4,8 +4,14 @@ from utilities.box_video import *
 from video.player import *
 from core import *
 
-# vc = VideoCreator((960, 1080), 2)
-# vc.export(bg_generator(30, (960, 1080), 30), fps=30)
+vc = VideoCreator((1920, 1080), 2)
+vc.export(box_moving(30, (1920, 1080), 30), fps=30, filename='output1.avi')
+#
+player = VideoPlayer(2, 'output1.avi', (1920, 1080))
+save_iter = player.play(static_mask([1, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 2]), 13.41, export=True)
 
-player = VideoPlayer(2, 'output1.avi', (960, 540))
-player.play(static_mask([1, 1, 2, 2]), 4.32)
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+out = cv2.VideoWriter('box.avi', fourcc, 30, (1920, 1080))
+for frame in save_iter:
+    out.write(frame)
+out.release()

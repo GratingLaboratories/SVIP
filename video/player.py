@@ -10,7 +10,7 @@ class VideoPlayer:
         self.dims = dims
         cv2.namedWindow('Grating Player')
 
-    def play(self, mask_iter, ppl):
+    def play(self, mask_iter, ppl, export=False):
         cap = cv2.VideoCapture(self.src)
 
         def resize_with_padding(img, target_dim):
@@ -30,7 +30,7 @@ class VideoPlayer:
         indicator = list(np.int32(np.zeros(self.dims[0])))
         while cap.isOpened():
             ret, frame = cap.read()
-            if not frame:
+            if not ret:
                 break
             s_height, s_width, channel = frame.shape
             try:
@@ -45,7 +45,8 @@ class VideoPlayer:
             tail = starts[1:]
             sub_frames = []
             for i, j in zip(head, tail):
-                sub_frames.append(frame[:, i: j])
+                tmp = frame[:, i: j]
+                sub_frames.append(cv2.resize(tmp, None, fx=1 / self.channel_num, fy=1))
 
             offset = 0
             padding = False
@@ -93,6 +94,9 @@ class VideoPlayer:
                     pointers[index] += 1
                 else:
                     continue
-            
-            cv2.imshow('Grating Player', new_frame)
-            cv2.waitKey(20)
+
+            if export:
+                yield new_frame
+            else:
+                cv2.imshow('Grating Player', new_frame)
+                cv2.waitKey(20)
