@@ -26,7 +26,7 @@ class VideoCreator:
         frame = np.hstack(frames)
         return frame
 
-    def export(self, src, fps=20.0, filename='output.avi', codec='XVID'):
+    def export(self, src, fps=20.0, filename='output1.avi', codec='XVID'):
         # Define the codec and create VideoWriter object
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         out = cv2.VideoWriter(filename, fourcc, fps, (self.dims[0] * self.channel_num, self.dims[1]))

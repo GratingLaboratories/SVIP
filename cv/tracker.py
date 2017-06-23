@@ -51,15 +51,15 @@ class Tracker:
         self.ischangeing = False
         self.dynamic = True
 
-    def update(self, frame):
+    def update(self, frame, dynamic=True):
         if self.isLost or self.ischangeing:
             return (0, 0)
 
         if self.dynamic:
             x, y = self.bact.x, self.bact.y
-            # frame = np.ones(frame.shape) * 255 - frame
-            self.bact.x += self.bact.x - self.bact.prev[0]
-            self.bact.y += self.bact.y - self.bact.prev[1]
+            if dynamic:
+                self.bact.x += self.bact.x - self.bact.prev[0]
+                self.bact.y += self.bact.y - self.bact.prev[1]
             self.bact.prev = (x, y)
         self.set_range()
 
@@ -70,9 +70,9 @@ class Tracker:
 
         region = frame[ylow: yhigh, xlow: xhigh]
 
-        region = np.array(region, dtype='uint8')
-        # cv2.imshow('small', region)
-        eyes = self.eye_cascade.detectMultiScale(region, 1.1, 4, minSize=(20, 20), maxSize=(50, 50))
+        region = np.array(region, dtype=np.uint8)
+        cv2.imshow('small', region)
+        eyes = self.eye_cascade.detectMultiScale(region)
 
         if len(eyes) > 0:
             self.retry = 0
@@ -83,8 +83,10 @@ class Tracker:
             self.bact.x = self.xrange[0] + posx
             self.bact.y = self.yrange[0] + posy
             self.dynamic = True
+            print("Found")
         else:
             if self.retry > 5:
+                print("Retrying")
                 region = np.ones(region.shape) * 255 - region
                 res = np.where(region >= region.max() - 3)  # TODO
                 resy = res[0]
@@ -144,7 +146,7 @@ def main():
             break
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        track.update(gray)
+        track.update(gray, dynamic=True)
 
         if track.isLost:
             cv2.putText(frame, "Bacterium lost", (10, 200), font, 0.8, (0, 0, 255), 2, cv2.LINE_AA)
