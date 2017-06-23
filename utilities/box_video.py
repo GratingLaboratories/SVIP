@@ -2,16 +2,16 @@ import cv2
 import numpy as np
 
 
-def box_moving(time, dims, fps, dense=50, length=80, vel=10, omega=0.005, A=2, far=8, eye_d=40):
+def box_moving(time, dims, fps, dense=10, length=150, vel=10, omega=0.005, A=4, far=8, eye_d=60):
     width, height = dims
     blank_img = np.zeros((height, width, 3), np.uint8)
 
     # Generate base mesh
     for i in list(np.linspace(0, width, dense)):
-        cv2.line(blank_img, (int(i), 0), (int(i), height), (115, 85, 47), 2)
+        cv2.line(blank_img, (int(i), 0), (int(i), height), (115, 85, 47), 8)
 
     for i in list(np.linspace(0, height, dense)):
-        cv2.line(blank_img, (0, int(i)), (width, int(i)), (115, 85, 47), 2)
+        cv2.line(blank_img, (0, int(i)), (width, int(i)), (115, 85, 47), 8)
     
     def projection():
         distance = far + nextPos[2]
@@ -40,10 +40,10 @@ def box_moving(time, dims, fps, dense=50, length=80, vel=10, omega=0.005, A=2, f
             nextPos[1] = length - nextPos[1]
             velocity[1] = -velocity[1]
 
-        nextPos[2] = A * np.sin(2 * np.pi * omega * i) + 2
+        nextPos[2] = A * np.sin(2 * np.pi * omega * i)
         delta = projection()
 
-        pos_lr = [[nextPos[0] - delta, nextPos[1]], [nextPos[0] + delta, nextPos[1]]]
+        pos_lr = [[nextPos[0] + delta, nextPos[1]], [nextPos[0] - delta, nextPos[1]]]
         frames = []
         for center in pos_lr:
             meshed = blank_img.copy()

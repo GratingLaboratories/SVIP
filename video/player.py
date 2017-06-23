@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import logging
+import time
 
 
 class VideoPlayer:
@@ -29,6 +30,7 @@ class VideoPlayer:
 
         indicator = list(np.int32(np.zeros(self.dims[0])))
         while cap.isOpened():
+            start = time.time()
             ret, frame = cap.read()
             if not ret:
                 break
@@ -77,8 +79,8 @@ class VideoPlayer:
                 layers.append(img)
 
             # for i in range(2):
-                # cv2.imshow(str(i), sub_frames[i])
-                # print(i, indicator.count(i + 1))
+            #     cv2.imshow(str(i), sub_frames[i])
+            #     print(i, indicator.count(i + 1))
 
             # Build new frame
             new_frame = np.zeros((self.dims[1], self.dims[0], 3), np.uint8)
@@ -99,4 +101,5 @@ class VideoPlayer:
                 yield new_frame
             else:
                 cv2.imshow('Grating Player', new_frame)
-                cv2.waitKey(20)
+                if cv2.waitKey(30) & 0xFF == 27:
+                    break
