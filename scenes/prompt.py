@@ -8,7 +8,7 @@ from .text import text
 
 class Prompt(Scene):
     def draw(self):
-        font = pygame.font.Font(self.fontname, 128)
+        font = pygame.font.Font(self.fontname, 72)
         pygame.draw.rect(self.surface, (0, 0, 0), Rect((100, 100), (1720, 880)))
         pygame.draw.lines(self.surface, (255, 255, 255), True,
                           [(100, 100), (1820, 100), (1820, 980), (100, 980)], 5)

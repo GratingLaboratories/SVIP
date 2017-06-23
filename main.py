@@ -19,6 +19,7 @@ import pygame
 from pygame.locals import *
 
 from scenes import Welcome
+from render import tick
 
 
 def main():
@@ -33,6 +34,7 @@ def main():
     while True:
         scene = scene.tick()
         pygame.display.flip()
+        tick()
         clock.tick(fps)
 
 

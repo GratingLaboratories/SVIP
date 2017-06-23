@@ -10,12 +10,10 @@ from .text import text
 
 class Welcome(Scene):
     def draw(self):
-        font = pygame.font.Font(self.fontname, 128)
+        font = pygame.font.Font(self.fontname, 72)
         self.surface.fill(0)
         render(font, text['welcome0'], surface=self.surface, topleft=(0, 0))
-        render(font, text['welcome1'], surface=self.surface, topleft=(0, 128))
-        render(font, text['welcome2'], surface=self.surface, topleft=(0, 256))
-        render(font, text['welcome9'], surface=self.surface, bottomleft=(0, 1080))
+        render(font, text['welcome9'], surface=self.surface, topleft=(0, 72))
 
     def esc(self, _):
         exit()

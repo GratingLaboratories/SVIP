@@ -16,15 +16,14 @@ class Ppl(Scene):
         self.step = 0.1
 
     def draw(self):
-        font = pygame.font.Font(self.fontname, 128)
+        font = pygame.font.Font(self.fontname, 72)
         self.surface.fill(0)
         render(font, text['ppl0'], surface=self.surface, topleft=(0, 0))
-        render(font, text['ppl1'], surface=self.surface, topleft=(0, 128))
-        render(font, text['ppl2'] % self.step, surface=self.surface, topleft=(0, 256))
-        render(font, text['ppl3'] % self.screen.ppl, surface=self.surface, topleft=(0, 384))
-        render(font, text['ppl7'], surface=self.surface, bottomleft=(0, 1080-128*2))
-        render(font, text['ppl8'], surface=self.surface, bottomleft=(0, 1080-128))
-        render(font, text['ppl9'], surface=self.surface, bottomleft=(0, 1080))
+        render(font, text['ppl2'] % self.step, surface=self.surface, topleft=(0, 72))
+        render(font, text['ppl3'] % self.screen.ppl, surface=self.surface, topleft=(0, 144))
+        render(font, text['ppl7'], surface=self.surface, topleft=(0, 216))
+        render(font, text['ppl8'], surface=self.surface, topleft=(0, 288))
+        render(font, text['ppl9'], surface=self.surface, topleft=(0, 360))
         for x in boundary(self.screen.ppl, self.surface.get_width()):
             pygame.draw.line(self.surface, (0, 255, 0), (x, 100), (x, 980))
 

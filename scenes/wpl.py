@@ -15,10 +15,11 @@ class Wpl(Scene):
         self.screen.wpl = 1
 
     def draw(self):
-        font = pygame.font.Font(self.fontname, 48)
+        font = pygame.font.Font(self.fontname, 72)
         self.surface.fill((0, 0, 255))
         render(font, text['wpl0'], surface=self.surface, topleft=(0, 0))
-        render(font, text['wpl9'], surface=self.surface, bottomleft=(0, 1080))
+        render(font, text['wpl8'], surface=self.surface, topleft=(0, 72))
+        render(font, text['wpl9'], surface=self.surface, topleft=(0, 144))
         for x in boundary(self.screen.ppl, 1120, 800):
             for i in range(self.screen.wpl):
                 pygame.draw.line(self.surface, (255, 255, 255), (int(x + i), 100), (int(x + i), 980))
