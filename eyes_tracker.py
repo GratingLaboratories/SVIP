@@ -74,6 +74,7 @@ class EyeTracker:
                     self.eye_sets['size'].append(max(eyes_list[0][2], eyes_list[0][3], eyes_list[1][2], eyes_list[1][3]))
 
             if self.show:
+                frame = cv2.resize(frame, None, fx=2, fy=2)
                 cv2.imshow("Tracker", frame)
                 if cv2.waitKey(30) & 0xFF == 27:
                     break
@@ -142,6 +143,7 @@ class EyeTracker:
                     pass
 
             if self.show:
+                frame = cv2.resize(frame, None, fx=2, fy=2)
                 cv2.imshow('Tracker', frame)
                 if cv2.waitKey(30) & 0xFF == 27:
                     break

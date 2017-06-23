@@ -71,7 +71,7 @@ class Tracker:
         region = frame[ylow: yhigh, xlow: xhigh]
 
         region = np.array(region, dtype=np.uint8)
-        cv2.imshow('small', region)
+        # cv2.imshow('small', region)
         eyes = self.eye_cascade.detectMultiScale(region)
 
         if len(eyes) > 0:
